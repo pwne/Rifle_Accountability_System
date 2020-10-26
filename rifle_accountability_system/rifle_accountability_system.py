@@ -14,8 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --------------------------------------------------------------------------------
 
-rifle_accountability_system.py v0.1.3
-    + Included a "version" variable to make version naming easier
+rifle_accountability_system.py v0.1.4
+    + fixed error where program would not print error to console, only to
+      the log file
 
 """
 
@@ -29,7 +30,7 @@ from tkinter import messagebox
 
 ### PROGRAM VARIABLES ###
 ## PROGRAM VERSION ##
-version = "v0.1.3"
+version = "v0.1.4"
 
 ## TIME OBJECT ##
 date=datetime.today()
@@ -42,7 +43,7 @@ logPath = f"{projectPath}\\logs"
 logFilename = f"RAS_LOG_{date.month}_{date.day}_{date.year}.txt"
 logFilepath = f"{logPath}\\{logFilename}"
 
-### HELPER FUNCTIONS ###
+### PROGRAM FUNCTIONS ###
 def clockOut():
     """ Logs the name of the cadet and the rifle serial NO. he/she drew """
     pass
@@ -54,7 +55,7 @@ def clockIn():
 def on_closing(loggerState):
     """ Program exit handler """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        logger.info(f"EXITING RAS{version}") if loggerState else print(f"EXITING RAS{version}")
+        logger.info(f"EXITING RAS{version}") if loggerState else sys.exit(f"EXITING RAS{version}")
         master.destroy()
 
 def tick(curtime=''):
@@ -75,29 +76,34 @@ if __name__ == "__main__":
 
     ### LOGGING CONFIGURATIONS ###
     try:
+        # FILE SEARCH
         if logFilename in os.listdir(logPath):
+            # CONFIGURE LOGGER (append to file if file is found)
             logging.basicConfig(filename=logFilepath,
                             format='%(asctime)s - %(levelname)s - %(message)s',
                             filemode='a',
                             level=logging.DEBUG)
         else:
+            # CONFIGURE LOGGER (create new file if file not found)
             logging.basicConfig(filename=logFilepath,
                             format='%(asctime)s - %(levelname)s - %(message)s',
                             filemode='w',
                             level=logging.DEBUG)
-        logger = logging.getLogger()
+        logger = logging.getLogger()    # Create a logger object
         logger.info(f"STARTING RAS{version}")
         logger.info("LOGGER CONFIGURATION SUCCESSFULL")
         loggerState = True
+
+    # HANDLE ANY ERRORS ABOUT THE LOGGER CONFIGURATION PROCESS
     except Exception as err:
         print(f"STARTING RAS{version}")
         print("LOGGER CONFIGURATION FAILED")
+        # CONTINUE PROGRAM FOLLOWING LOGGER CONFIGURATION FALIUE
         msgBox = messagebox.askquestion("LOGGER FAILED", f"The logging system was unable to start due to the following reason(s): \n\n{err}\n\nAny events will not be logged.\n\nWould you like to continue?", icon="warning")
         if msgBox == 'yes':
             loggerState = False
         else:
-            print(f"EXITING RAS{version}")
-            sys.exit()
+            sys.exit(f"EXITING RAS{version}")
 
     try:
         ### GENERAL TKINTER SETTINGS ###
@@ -157,4 +163,4 @@ if __name__ == "__main__":
         master.mainloop()
     except Exception as err:
         logger.critical(err)
-        sys.exit(-1)
+        sys.exit(f"CRITICAL ERROR ENCOUNTERED:\n\n{err}\n\nEXITING RAS{version}")
