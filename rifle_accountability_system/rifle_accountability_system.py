@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --------------------------------------------------------------------------------
 
-rifle_accountability_system.py v0.1.2
-    + Main Section Error Handling added
-    + Improved Logger error handling
+rifle_accountability_system.py v0.1.3
+    + Included a "version" variable to make version naming easier
 
 """
 
@@ -29,6 +28,9 @@ from tkinter import *
 from tkinter import messagebox
 
 ### PROGRAM VARIABLES ###
+## PROGRAM VERSION ##
+version = "v0.1.3"
+
 ## TIME OBJECT ##
 date=datetime.today()
 
@@ -52,7 +54,7 @@ def clockIn():
 def on_closing(loggerState):
     """ Program exit handler """
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        logger.info("EXITING RASv0.9") if loggerState else print("EXITING RASv0.9")
+        logger.info(f"EXITING RAS{version}") if loggerState else print(f"EXITING RAS{version}")
         master.destroy()
 
 def tick(curtime=''):
@@ -69,7 +71,7 @@ if __name__ == "__main__":
     master = Tk()
     master.state("zoomed")                      # Use for development ONLY
     #master.attributes("-fullscreen", True)     # Uncomment for production
-    master.title("RASv0.9")
+    master.title(f"RAS{version}")
 
     ### LOGGING CONFIGURATIONS ###
     try:
@@ -83,18 +85,18 @@ if __name__ == "__main__":
                             format='%(asctime)s - %(levelname)s - %(message)s',
                             filemode='w',
                             level=logging.DEBUG)
-        #logger = logging.getLogger()
-        logger.info("STARTING RASv0.9.1")
+        logger = logging.getLogger()
+        logger.info(f"STARTING RAS{version}")
         logger.info("LOGGER CONFIGURATION SUCCESSFULL")
         loggerState = True
     except Exception as err:
-        print("STARTING RASv0.9")
+        print(f"STARTING RAS{version}")
         print("LOGGER CONFIGURATION FAILED")
         msgBox = messagebox.askquestion("LOGGER FAILED", f"The logging system was unable to start due to the following reason(s): \n\n{err}\n\nAny events will not be logged.\n\nWould you like to continue?", icon="warning")
         if msgBox == 'yes':
             loggerState = False
         else:
-            print("EXITING RASv0.9.1")
+            print(f"EXITING RAS{version}")
             sys.exit()
 
     try:
@@ -117,7 +119,7 @@ if __name__ == "__main__":
         topFrame = Frame(master, width=master.winfo_screenwidth(), height=master.winfo_screenheight()/10)
         topFrame.pack(side=TOP, fill=X, expand=1, anchor=N)
         titleLabel = Label(topFrame, font=('arial', 12, 'bold'), bd=5, anchor=W,
-                            text="Rifle Accountability System v0.9")
+                            text=f"Rifle Accountability System {version}")
         titleLabel.pack(side=LEFT)
 
         ### CLOCK FRAME (WITHIN "TOP FRAME") ###
