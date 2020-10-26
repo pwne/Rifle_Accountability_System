@@ -14,9 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --------------------------------------------------------------------------------
 
-rifle_accountability_system.py v0.1.4
-    + fixed error where program would not print error to console, only to
-      the log file
+rifle_accountability_system.py v0.1.5
+    + replaced 'warning' icon with 'error' icon
 
 """
 
@@ -30,7 +29,7 @@ from tkinter import messagebox
 
 ### PROGRAM VARIABLES ###
 ## PROGRAM VERSION ##
-version = "v0.1.4"
+version = "v0.1.5"
 
 ## TIME OBJECT ##
 date=datetime.today()
@@ -99,7 +98,7 @@ if __name__ == "__main__":
         print(f"STARTING RAS{version}")
         print("LOGGER CONFIGURATION FAILED")
         # CONTINUE PROGRAM FOLLOWING LOGGER CONFIGURATION FALIUE
-        msgBox = messagebox.askquestion("LOGGER FAILED", f"The logging system was unable to start due to the following reason(s): \n\n{err}\n\nAny events will not be logged.\n\nWould you like to continue?", icon="warning")
+        msgBox = messagebox.askquestion("LOGGER FAILED", f"The logging system was unable to start due to the following reason(s): \n\n{err}\n\nAny events will not be logged.\n\nWould you like to continue?", icon="error")
         if msgBox == 'yes':
             loggerState = False
         else:
@@ -161,6 +160,7 @@ if __name__ == "__main__":
         tick()
         master.configure(menu=mainMenu)
         master.mainloop()
+
     except Exception as err:
         logger.critical(err)
         sys.exit(f"CRITICAL ERROR ENCOUNTERED:\n\n{err}\n\nEXITING RAS{version}")
