@@ -65,6 +65,24 @@ def tick(curtime=''):
         clockLabel.config(text=curtime)
     clockLabel.after(200, tick, curtime)
 
+def input_number(number):
+    """ Access the global expression variables """
+    global text
+    text += str(number)
+    serialNOIn.set(text)
+
+def delete_previous_number():
+    """ Delete the last enterd number """
+    global text
+    text = text[:-1]
+    serialNOIn.set(text)
+
+def clear_input_field():
+    """ Clear the input field """
+    global text
+    text = ""
+    serialNOIn.set("")
+
 ### MAIN RUNNER ###
 if __name__ == "__main__":
     ### TKINTER WINDOW SETUP
@@ -72,6 +90,11 @@ if __name__ == "__main__":
     master.state("zoomed")                      # Use for development ONLY
     #master.attributes("-fullscreen", True)     # Uncomment for production
     master.title(f"RAS{version}")
+    master.configure(bg="grey80")
+
+    ## VARIABLE CLASS INSTANTIATION ##
+    serialNOIn = StringVar()
+    text = ""
 
     ### LOGGING CONFIGURATIONS ###
     try:
@@ -105,9 +128,8 @@ if __name__ == "__main__":
             sys.exit(f"EXITING RAS{version}")
 
     try:
-        ### GENERAL TKINTER SETTINGS ###
+        ### TKINTER PROTOCOL SETTINGS ###
         master.protocol("WM_DELETE_WINDOW", lambda: on_closing(loggerState))
-        master.configure(bg="grey80")
 
         ### IMAGE SETTINGS ###
         pixelVirtual = PhotoImage(width=1, height=1)
@@ -137,25 +159,36 @@ if __name__ == "__main__":
         leftFrame = Frame(master, width=master.winfo_screenwidth()/2, height=master.winfo_screenheight(), bg="grey80")
         leftFrame.pack(side=LEFT, fill=X, expand=1, anchor=W)
 
+        ## LABELS ##
+        nameLabel = Label(leftFrame, text="Name:", font=('arial', 25, 'bold'), bg="grey80").grid(sticky=W)
+        serialNOLabel = Label(leftFrame, text="Serial NO:", font=('arial', 25, 'bold'), bg="grey80").grid(sticky=W)
+
+        ## ENTRIES ##
+        nameEntry = Entry(leftFrame)
+        nameEntry.grid(row=0, column=1)
+        serialNOEntry = Entry(leftFrame, textvar=serialNOIn)
+        serialNOEntry.grid(row=1, column=1)
+
         ### RIGHT FRAME ###
         rightFrame = Frame(master, width=master.winfo_screenwidth()/2, height=master.winfo_screenheight(), bg="grey80")
         rightFrame.pack(side=LEFT, fill=X, expand=1, anchor=E)
 
         buttonWidth = master.winfo_screenwidth()/6
         buttonHeight = (master.winfo_screenwidth()-master.winfo_screenwidth()/10)/8
-        font = ('arial', 50, 'bold')
-        _1 = Button(rightFrame, text="1", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=0,row=1)
-        _2 = Button(rightFrame, text="2", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=1,row=1)
-        _3 = Button(rightFrame, text="3", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=2,row=1)
-        _4 = Button(rightFrame, text="4", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=0,row=2)
-        _5 = Button(rightFrame, text="5", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=1,row=2)
-        _6 = Button(rightFrame, text="6", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=2,row=2)
-        _7 = Button(rightFrame, text="7", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=0,row=3)
-        _8 = Button(rightFrame, text="8", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=1,row=3)
-        _9 = Button(rightFrame, text="9", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=2,row=3)
-        _0 = Button(rightFrame, text="0", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font).grid(column=1,row=4)
-        _clear = Button(rightFrame, text="CLEAR", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=('arial', 25, 'bold')).grid(column=0,row=4)
-        _backspace = Button(rightFrame, text="BACKSPACE", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=('arial', 25, 'bold')).grid(column=2,row=4)
+        font1 = ('arial', 50, 'bold')
+        font2 = ('arial', 25, 'bold')
+        _1 = Button(rightFrame, text="1", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(1)).grid(column=0,row=1)
+        _2 = Button(rightFrame, text="2", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(2)).grid(column=1,row=1)
+        _3 = Button(rightFrame, text="3", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(3)).grid(column=2,row=1)
+        _4 = Button(rightFrame, text="4", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(4)).grid(column=0,row=2)
+        _5 = Button(rightFrame, text="5", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(5)).grid(column=1,row=2)
+        _6 = Button(rightFrame, text="6", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(6)).grid(column=2,row=2)
+        _7 = Button(rightFrame, text="7", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(7)).grid(column=0,row=3)
+        _8 = Button(rightFrame, text="8", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(8)).grid(column=1,row=3)
+        _9 = Button(rightFrame, text="9", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(9)).grid(column=2,row=3)
+        _0 = Button(rightFrame, text="0", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font1, command=lambda: input_number(0)).grid(column=1,row=4)
+        _clear = Button(rightFrame, text="CLEAR", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font2, command=lambda: clear_input_field()).grid(column=0,row=4)
+        _backspace = Button(rightFrame, text="BACKSPACE", image=pixelVirtual, width=buttonWidth, height=buttonHeight, compound="c", font=font2, command=lambda: delete_previous_number()).grid(column=2,row=4)
 
         tick()
         master.configure(menu=mainMenu)
