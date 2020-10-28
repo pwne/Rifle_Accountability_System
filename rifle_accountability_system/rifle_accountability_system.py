@@ -14,8 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 --------------------------------------------------------------------------------
 
-rifle_accountability_system.py v0.1.5
-    + replaced 'warning' icon with 'error' icon
+rifle_accountability_system.py v0.2.0
+    + Added Labels and Entried for name and Serial NO
+    + Added functionality to the buttons
+    + Added a way to clear the textbox
+    + Added a way to delete the last character entered
+
 
 """
 
@@ -29,7 +33,7 @@ from tkinter import messagebox
 
 ### PROGRAM VARIABLES ###
 ## PROGRAM VERSION ##
-version = "v0.1.5"
+version = "v0.2.0"
 
 ## TIME OBJECT ##
 date=datetime.today()
